@@ -13,6 +13,8 @@ import Dappazon from './abis/Dappazon.json'
 import config from './config.json'
 
 function App() {
+
+  const contractAddress = "0x6fb4395989391062f4C3E1599b4DDCC92B4d3226"
   const [provider, setProvider] = useState(null)
   const [dappazon, setDappazon] = useState(null)
 
@@ -33,9 +35,10 @@ function App() {
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     setProvider(provider)
+    console.log(provider);
     const network = await provider.getNetwork()
 
-    const dappazon = new ethers.Contract(config[network.chainId].dappazon.address, Dappazon, provider)
+    const dappazon = new ethers.Contract(contractAddress, Dappazon, provider)
     setDappazon(dappazon)
 
     const items = []

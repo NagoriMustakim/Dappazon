@@ -6,37 +6,48 @@
 // global scope, and execute the script.
 const hre = require("hardhat")
 const { items } = require("../src/items.json")
-
+const { verify } = require('./verify')
 const tokens = (n) => {
   return ethers.utils.parseUnits(n.toString(), 'ether')
 }
 
 async function main() {
-  // Setup accounts
-  const [deployer] = await ethers.getSigners()
+//   // Setup accounts
+//   const [deployer] = await ethers.getSigners()
 
-  // Deploy Dappazon
-  const Dappazon = await hre.ethers.getContractFactory("Dappazon")
-  const dappazon = await Dappazon.deploy()
-  await dappazon.deployed()
+//   // Deploy Dappazon
+//   const Dappazon = await hre.ethers.getContractFactory("Dappazon")
+//   const dappazon = await Dappazon.deploy()
+//   await dappazon.deployed()
 
-  console.log(`Deployed Dappazon Contract at: ${dappazon.address}\n`)
+//   console.log(`Deployed Dappazon Contract at: ${dappazon.address}\n`)
 
-  // Listing items...
-  for (let i = 0; i < items.length; i++) {
-    const transaction = await dappazon.connect(deployer).list(
-      items[i].id,
-      items[i].name,
-      items[i].category,
-      items[i].image,
-      tokens(items[i].price),
-      items[i].rating,
-      items[i].stock,
-    )
+//   // Listing items...
+//   for (let i = 0; i < items.length; i++) {
+//     const transaction = await dappazon.connect(deployer).list(
+//       items[i].id,
+//       items[i].name,
+//       items[i].category,
+//       items[i].image,
+//       tokens(items[i].price),
+//       items[i].rating,
+//       items[i].stock,
+//     )
 
-    await transaction.wait()
+//     await transaction.wait()
 
-    console.log(`Listed item ${items[i].id}: ${items[i].name}`)
+//     console.log(`Listed item ${items[i].id}: ${items[i].name}`)
+//   }
+  // verfying smart contract on ETHERSCAN
+
+  arguments = []
+  if (process.env.ETHERSCAN_API_KEY) {
+    console.log("Verifying...")
+    let address = "0x6fb4395989391062f4C3E1599b4DDCC92B4d3226"
+    await verify(address, arguments)
+  }
+  else {
+    console.log("ETHERSCAN_API_KEY not found");
   }
 }
 

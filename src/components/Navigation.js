@@ -3,6 +3,15 @@ import { ethers } from 'ethers'
 const Navigation = ({ account, setAccount }) => {
     const connectHandler = async () => {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x5') {
+            //alert('Incorrect network! Switch your metamask network to Rinkeby');
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x5' }],
+            })
+        }
         const account = ethers.utils.getAddress(accounts[0])
         setAccount(account);
     }
